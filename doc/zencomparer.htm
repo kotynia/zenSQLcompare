@@ -1,0 +1,286 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl">
+  <head>
+    <title>
+      database comparer | zenComparer
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="files/jquery.min.js" type="text/javascript" charset="utf-8">
+</script>
+    <link rel="stylesheet" href="files/prettyPhoto.css" type="text/css" media=
+    "screen" charset="utf-8" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <script src="files/jquery.prettyPhoto.js" type="text/javascript" charset=
+    "utf-8">
+</script>
+    <script type="text/javascript" charset="utf-8">
+                $(document).ready(function(){
+                        $("a[rel^='prettyPhoto']").prettyPhoto();
+                });
+               
+    </script>
+<!--  //v1.1 2009.09.04 marcin kotynia -->
+<!--  //v1.1 2010.04.14 marcin kotynia -->
+
+    <style type="text/css">
+
+
+    body { font: 12px Arial, Helvetica, sans-serif; background: #F6F6F6 url(files/background.png) repeat-x;  margin: 0; color: #555; text-align: left; }
+    #header a {color:white;text-decoration: none; }
+	#head {font-size:15px;}
+	img { border: none; }
+    a { color: #999; text-decoration: underline; }
+    a.on { color: #444; text-decoration: none; }
+    a.off { color: #999; text-decoration: underline; }
+	.no {color:red; font-weight:bold;}
+    label {  border-bottom:dotted  1px black; display:block;font-weight:bold; font-size: 1.3em; color:#7E8B8B; margin-top:10px;}
+    .download {color:green;font-size:1.3em; }
+    ul {padding-left:20px;}
+    li{list-style-type: square;}
+
+    #header {margin:30px 0 20px 20px; font-size:30px;color:white; height:50px;}
+    #content {margin:50px 0 20px 20px; width:1170px;}
+    #footer {border-top:solid 1px grey; width:1170px; padding:5px 0;margin: 20px 0 20px 20px; color: grey; } 
+
+    #col1 {width:310px;float:left;}
+    #col2 {width:800px;float:left;margin-left:30px;}
+    #col2 img {border: 1px solid #ddd; }
+
+    * html .cf { height: 1%; }
+
+	table { vertical-align: top; text-align: left; }
+    table td a { white-space: nowrap; }
+    table { border-collapse: collapse;  margin-bottom: 5px; margin-top: 0px; }
+	table thead tr th { background-color: #ebeff9; color: #000; line-height: 20px; font-weight: 700; padding-left: 3px; text-align: left; border-bottom: 1px solid Gray; border-top: 1px solid Gray; }
+	table caption { font-size: 120%; color: #CDCDCD; text-transform: uppercase; text-align: left; font-weight: 700; background-color: #ebeff9; border: 1px solid Gray; }
+	table tbody td { color: #333; padding: 3px; border-top: 1px solid #CCC; }
+	td, th { padding: .1em; vertical-align: top; font-weight: 400; }
+
+	
+	
+    </style>
+    <meta name="verify-v1" content=
+    "wMlYGbi3cyLidZLm0anwQybbGIXNoV1qwekv9FDo6j4=" />
+    <script type="text/javascript">
+
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+    </script>
+    <script type="text/javascript">
+
+    try {
+    var pageTracker = _gat._getTracker("UA-2173429-3");
+    pageTracker._trackPageview();
+    } catch(err) {}
+
+    </script>
+    <style type="text/css">
+/*<![CDATA[*/
+    li.c1 {list-style: none}
+    /*]]>*/
+    </style>
+    <style type="text/css">
+/*<![CDATA[*/
+    div.c3 {clear:both;}
+    li.c2 {list-style: none}
+    p.c1 {font-weight: bold}
+    /*]]>*/
+    </style>
+  </head>
+  
+  <body>
+    <div id="header">
+      <a href="http://kotynia.com">marcin<font color="red">@web</font></a>
+	  <span id="head" >zenComparer - Compares and synchronizes SQL database schemas.</span>
+    </div>
+    <div id="content">
+      <div id="col1">
+        <label>Downloads</label>
+        <h3>
+          <a href="../download/zencomparer.zip" class="download">free zenComparer 1.2</a>
+        </h3>
+		<h3>Optional tool for presenting differences <a href="http://winmerge.org/" >http://winmerge.org/</a></h3>
+
+		<ul>
+		<li>new version(1.2.1) 2010/04/26 (fix bug with white space)</li>
+		<li>new version(1.2) 2010/04/16 (new functions)</li>
+		<li>new version(1.1) 2010/04/14 (fix bugs,new functions)</li>
+		<li>new version(1.0) 2009/12/17 (fix bugs,new functions)</li>
+		</ul>
+	  
+	  <label>Support</label>
+        <p>
+          <b>contact &amp; bugs</b> <script type="text/javascript">
+
+          document.write('<'+'a href="mailto:marcin@k'+'otynia.com">marc'+'in@k'+'otynia.com<\/a>');
+          </script>
+        </p>
+      </div>
+      <div id="col2">
+	   <label>zenComparer is simple :)</label>
+	   <ul>
+	  
+	   <li>easy to use MSSQL database Schema comparision tool</li>
+	   <li>no additional library need</li>
+	   <li>no instalation just unzip and run</li>	  
+	   <li>Generate T-SQL scripts to update one database to match the schema of another</li>
+	   </ul>
+	   
+	  
+        <label>Functional list</label>
+        <ul>
+          <li>Compare Database schema
+          </li>
+          <li>Generate repair script 
+          </li>
+          <li>Save/load configuration to file
+          </li>
+		  <li>Define Excluded object list</li>
+		  <li>Show difference in schema in external tool (ex. <a href="http://winmerge.org/" >http://winmerge.org/</a>)</li>
+
+		  </ul>
+		  
+		    <label>Screenshots</label>
+			<p>
+		  <a href="files/lr_zenComparer.jpg" rel=
+            "prettyPhoto"><img src="files/sm_zenComparer.jpg" alt=
+            "zencomparer" /></a>
+		  </p>
+		  <label>Scripts that zenComparer will generate for you</label>
+           <p>
+<table>
+  <thead>
+    <tr>
+      <th>Object Type</th>
+      <th>Description</th>
+      <th>Repair script</th>
+      <th>Display information</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Tables (U)</td>
+      <td>Missing table</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missing column</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missmatched column Data type</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missmatched column character_maximum_length</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missmatched column default</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td>Scalar Funtions (FN)</td>
+      <td>Missmatched Scalar Funtion</td>
+      <td>YES</td>
+      <td>
+        <p>YES</p>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missing Scalar Funtion</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td>Scalar Funtions (IF)</td>
+      <td>Missmatched Scalar Funtion</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missing Scalar Funtion</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td>Table-valued Function (TF)</td>
+      <td>Missmatched Table-valued Function</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missing Table-valued Function</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td>Procedures (P)</td>
+      <td>Missmatched Procedure</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missing Procedure</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td>Triggers (TR)</td>
+      <td>Missmatched Trigger</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missing Trigger</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td>Views (V)</td>
+      <td>Missmatched View</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missing View</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+  </tbody>
+</table>
+
+      </p>
+      </div>
+      <div id="col3"></div>
+    </div>
+    <div class="c3"></div>
+    <div id="footer">Copyright &copy; Marcin Kotynia 2009.</div>
+	<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-2173429-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+  </body>
+</html>
