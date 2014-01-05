@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("zenCompare")]
+[assembly: AssemblyTitle("zenSQLCompare")]
 [assembly: AssemblyDescription("https://github.com/marcinKotynia/zenSQLcompare")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("zenCompare - Compare MSSQL 2005-2008 Database Schema")]
-[assembly: AssemblyCopyright("Copyright ©  2008-2010 Marcin Kotynia")]
+[assembly: AssemblyProduct("zenSQLCompare - Compare MSSQL Database Schema")]
+[assembly: AssemblyCopyright("Copyright © 2014 Marcin Kotynia")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2.1.0")]
-[assembly: AssemblyFileVersion("1.2.1.0")]
+[assembly: AssemblyVersion("1.2.2.0")]
+[assembly: AssemblyFileVersion("1.2.2.0")]
