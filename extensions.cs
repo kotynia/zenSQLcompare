@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
-//using System.Data.SQLite;
 namespace zenComparer
 {
     public static class Extensions
@@ -126,37 +125,5 @@ namespace zenComparer
             }
             return temp;
         }
-
-        /// <summary>
-        /// Zwraca Datatable
-        /// </summary>
-        /// <param name="storedProcedure"></param>
-        /// <param name="strsql"></param>
-        /// <param name="paramss"></param>
-        /// <param name="_dsn">null default</param>
-        /// <param name="cacheExpire">jesli wieksze od 0 wtedy cache w minutach</param>
-        /// <returns></returns>
-        //public static DataTable sqlLiteGetDataTable(string sql, string _dsn)
-        //{
-
-        //    SQLiteConnection dbconn;
-        //    SQLiteCommand dbCMD;
-
-
-        //     string dbConnStr = string.Format("Data Source={0};UTF8Encoding=True;Version=3",_dsn);
-
-        //    dbconn = new SQLiteConnection(dbConnStr );
-        //    dbconn.Open();
-
-        //    dbCMD = new SQLiteCommand(sql, dbconn);
-        //    SQLiteDataReader reader = dbCMD.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-        //    DataTable dt = new DataTable();
-        //    dt.Load(reader);
-
-        //    dbconn.Close();
-        //    return dt;
-
-        //}
-
     }
 }

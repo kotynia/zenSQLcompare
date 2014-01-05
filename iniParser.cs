@@ -3,15 +3,6 @@ using System.IO;
 using System.Collections;
 
 
-/// <summary>
-/// Do parsowania parametrow
-/// [REPORT]
-/// LASTSEPARATOR=NO  (DEFAULT YES|NO )
-/// [@DATA_DOSTAWY]
-/// TYPE=text  (NUMBER DOMYSLNIE text)               !to obsluzyc
-/// class= req num   (DOMYSLNIE nie)                            !to obsluzyc 
-/// SEPARATOR= and    (DOMYSLNIE AND ,OR , )    !to obsluzyc
-/// </summary>
 public class iniParser
 {
     private Hashtable keyPairs = new Hashtable();

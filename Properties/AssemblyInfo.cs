@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("zenComparer")]
-[assembly: AssemblyDescription("http://kotynia.com/zenComparer.htm")]
+[assembly: AssemblyTitle("zenCompare")]
+[assembly: AssemblyDescription("https://github.com/marcinKotynia/zenSQLcompare")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("zenComparer - Compare MSSQL 2005-2008 Database Schema")]
+[assembly: AssemblyProduct("zenCompare - Compare MSSQL 2005-2008 Database Schema")]
 [assembly: AssemblyCopyright("Copyright ©  2008-2010 Marcin Kotynia")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

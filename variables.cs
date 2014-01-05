@@ -6,8 +6,7 @@ namespace zenComparer
         #region Sqls
 
         /// <summary>
-        /// Do porownywania widokow ,procedur funkcji,tabel, iw szystkiego co sie znajdzie
-        /// Bez default constraint to jest w zapytaniu tabel
+        /// Query for compare views,procedures,triggers...
         /// </summary>
        public static string sqlObjects = @"
 select distinct  SCHEMA_NAME(so.schema_id) + '.'+ so.name + '|' + so.type collate polish_ci_as + '|' + type_desc + '|'
@@ -25,7 +24,7 @@ where
 and so.is_ms_shipped =0
 ";
         /// <summary>
-        /// Do porownywania tabel
+        /// Query for compare table schema
         /// </summary>
        public static string sqlTables = @"
 SELECT   [text], [key], type
@@ -68,7 +67,7 @@ ORDER BY  table_name,
 
 
         /// <summary>
-        /// Create table
+        /// Create table query
         /// </summary>
         public static string sqlCreateTable = @"     
 select  'create table [' + so.name + '] (' + o.list + ')' + CASE WHEN tc.Constraint_Name IS NULL THEN '' ELSE 'ALTER TABLE ' + so.Name + ' ADD CONSTRAINT ' + tc.Constraint_Name  + ' PRIMARY KEY ' + ' (' + LEFT(j.List, Len(j.List)-1) + ')' END
