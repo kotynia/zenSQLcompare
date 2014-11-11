@@ -13,10 +13,10 @@ namespace zenComparer
     public partial class frmMain : Form
     {
 
-        public  static string  masterConnectionString;
-         public static string slaveConnectionString ;
-         public static string commandLineArguments;
-         public static string commandLineTool;
+        public static string masterConnectionString;
+        public static string slaveConnectionString;
+        public static string commandLineArguments;
+        public static string commandLineTool;
 
         #region Initialize
         int excludedNumber;
@@ -27,7 +27,7 @@ namespace zenComparer
             //Form
             this.Text = string.Format("{0} {1} | {2}", AssemblyProduct, AssemblyVersion, AssemblyDescription);
 
-          //  toolCompare.Click += new EventHandler(btncompare_Click);
+            //  toolCompare.Click += new EventHandler(btncompare_Click);
 
             //Porownanie schema
             btnStartCompare.Click += new EventHandler(btncompare_Click); //porownanie schema
@@ -71,7 +71,7 @@ namespace zenComparer
 
                         // Generate File
 
-                        string filenameModel = string.Format("{0}_{1}_{2}_M.sql", mdatabase.Text, (string)dgvr.Cells["object"].Value, DateTime.Now.ToString("yyyymmddhhmmss"));
+                        string filenameModel = string.Format("{3}_{0}_{1}_{2}_M.sql", mdatabase.Text, (string)dgvr.Cells["object"].Value, DateTime.Now.ToString("yyyymmddhhmmss"), mserver.Text);
                         FileStream f = new FileStream(filenameModel, FileMode.Create);
                         StreamWriter s = new StreamWriter(f);
 
@@ -81,7 +81,7 @@ namespace zenComparer
                         f.Close();
 
 
-                        string filenameTarget = string.Format("{0}_{1}_{2}_T.sql", sdatabase.Text, (string)dgvr.Cells["object"].Value, DateTime.Now.ToString("yyyymmddhhmmss"));
+                        string filenameTarget = string.Format("{3}_{0}_{1}_{2}_T.sql", sdatabase.Text, (string)dgvr.Cells["object"].Value, DateTime.Now.ToString("yyyymmddhhmmss"), mserver.Text);
                         f = new FileStream(filenameTarget, FileMode.Create);
                         s = new StreamWriter(f);
 
@@ -115,23 +115,25 @@ namespace zenComparer
         /// </summary>
         void btncompare_Click(object sender, EventArgs e)
         {
-         //   try
-           // {
-                Cursor.Current = Cursors.WaitCursor;
-                excludedNumber = 0;
-                dgResult.Rows.Clear();
-                toolLog.Clear();
-                result.Clear();
-                logger("COMPARE START");
+            //   try
+            // {
+            Cursor.Current = Cursors.WaitCursor;
+            excludedNumber = 0;
+            dgResult.Rows.Clear();
+            toolLog.Clear();
+            result.Clear();
+            logger("COMPARE START");
 
-                compareTables();
-                Refresh();
-                compareObjects();
+            compareTables();
+            Refresh();
+            compareObjects();
 
-                gridToScript(true);
+             compareIndex();
 
-                logger(string.Format("COMPARE FINISHED found {0} problems. Excluded item {1}", dgResult.Rows.Count.ToString(), excludedNumber));
-                Cursor.Current = Cursors.Default;
+            gridToScript(true);
+
+            logger(string.Format("COMPARE FINISHED found {0} problems. Excluded item {1}", dgResult.Rows.Count.ToString(), excludedNumber));
+            Cursor.Current = Cursors.Default;
 
             //}
             //catch (Exception ex)
@@ -140,8 +142,22 @@ namespace zenComparer
             //    MessageBox.Show(this, ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             //}
         }
+        void compareObjects()
+        {
+            logger("Get schema for objects from MODEL ");
+            DataTable master = new DataTable();
+            master = Extensions.GetDataTable(variables.sqlObjects, txtMaster.Text);
 
 
+            logger("Get schema for objects from TARGET");
+            DataTable slave = new DataTable();
+            slave = Extensions.GetDataTable(variables.sqlObjects, txtSlave.Text);
+
+            logger("START COMPARING objects SCHEMA");
+            compare(master, slave, out  excludedNumber);
+            master.Dispose();
+            slave.Dispose();
+        }
         /// <summary>
         /// Dodanie pozycji do gridview
         /// </summary>
@@ -328,40 +344,28 @@ namespace zenComparer
         void logger(string text)
         {
             toolLog.Text = text;
-            //toolLog.Refresh();
             if (ActiveForm != null)
                 ActiveForm.Refresh();
         }
 
-
-
-        /// <summary>
-        /// Porownywanie Stored Procedure,Views,Functions,Triggers
-        /// </summary>
-        void compareObjects()
+        void compareIndex()
         {
-            //Pobranie danych z master
-
-            logger("Get schema for objects from MODEL ");
-
+            logger("Get schema for index from MODEL ");
             DataTable master = new DataTable();
+            master = Extensions.GetDataTable(variables.sqlIndex, txtMaster.Text);
 
-            //if (lblfile.Text.Length > 0)
-            //master = Extensions.sqlLiteGetDataTable("select * from sqlObjects", lblfile.Text);
-            //else
-            master = Extensions.GetDataTable(variables.sqlObjects, txtMaster.Text);
 
-            //Pobranie danych z slav
-            logger("Get schema for objects from TARGET");
+            logger("Get schema for index from TARGET");
             DataTable slave = new DataTable();
-            slave = Extensions.GetDataTable(variables.sqlObjects, txtSlave.Text);
+            slave = Extensions.GetDataTable(variables.sqlIndex, txtSlave.Text);
 
-
-            logger("START COMPARING objects SCHEMA");
+            logger("START COMPARING index SCHEMA");
             compare(master, slave, out excludedNumber);
             master.Dispose();
             slave.Dispose();
         }
+
+
 
         /// <summary>
         /// Porownywanie tables
@@ -471,13 +475,13 @@ namespace zenComparer
                 if (action == "Missing" || action == "Missmatched")
                     switch (option)
                     {
-                        case "U":
-                            if (action == "Missing") //Brak tabeli
-                            {
+                        //case "U":
+                        //    if (action == "Missing") //Brak tabeli
+                        //    {
 
 
-                            }
-                            break;
+                        //    }
+                        //    break;
                         case "CO": //user tables sa bardziej skomplikowane
                             /// 0 -table name
                             /// 1- column_name
@@ -492,12 +496,16 @@ namespace zenComparer
                             if (action == "Missing")  //brakuje kolumny
                             {
 
-                                script = string.Format("alter table [{0}] add [{1}] {2} {3} {4}",
+
+
+
+                                script = string.Format("alter table [{5}].[{0}] add [{1}] {2} {3} {4}",
                                     Extensions._getSeparatedString(b, 0),  //table name
                                     Extensions._getSeparatedString(b, 1),  //column name
                                     datatype(b),  //get varchar(max) decimal(18,2)
                                        identity(b), //identity
-                                       notnull(b) //not null
+                                       notnull(b), //not null
+                                         Extensions._getSeparatedString(b, 9) //schema
                                    );
 
                                 dgResultInsertRow("Target",
@@ -522,11 +530,12 @@ namespace zenComparer
                                 if (string.CompareOrdinal(x, x1) != 0)
                                 {
 
-                                    script = string.Format("alter table [{0}] ALTER COLUMN  [{1}] {2} {3} ",
+                                    script = string.Format("alter table [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3} ",
                                       Extensions._getSeparatedString(b, 0),  //table name
                                       Extensions._getSeparatedString(b, 1),  //column name
                                       datatype(b),
-                                       notnull(b) //not null
+                                       notnull(b), //not null
+                                       Extensions._getSeparatedString(b, 9) //schema
                                       );
 
                                     dgResultInsertRow("Target",
@@ -553,11 +562,12 @@ namespace zenComparer
                                     //  );
                                     //result.AppendText(script + variables.scriptSeparator);
 
-                                    script = string.Format("alter table [{0}] add CONSTRAINT [{1}] DEFAULT  {2} FOR {3}",
+                                    script = string.Format("alter table [{4}].[{0}] add CONSTRAINT [{1}] DEFAULT  {2} FOR {3}",
                                      Extensions._getSeparatedString(b, 0),  //table name
                                      Extensions._getSeparatedString(b, 8),  //default constraint name
                                      Extensions._getSeparatedString(b, 4),  //isnull(column_default, '')
-                                     Extensions._getSeparatedString(b, 1)  //1- column_name
+                                     Extensions._getSeparatedString(b, 1),  //1- column_name
+                                     Extensions._getSeparatedString(b, 9) //schema
                                       );
 
                                     dgResultInsertRow("Target",
@@ -575,13 +585,14 @@ namespace zenComparer
                                 if (string.CompareOrdinal(x, x1) != 0)
                                 {
 
-                                    script = string.Format("alter table [{0}] ALTER COLUMN  [{1}] {2} {3} ",
+                                    script = string.Format("alter table [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3} ",
                                       Extensions._getSeparatedString(b, 0),  //table name
                                       Extensions._getSeparatedString(b, 1),  //column name
                                       datatype(b),
                                         // identity(b), //identity
-                                       notnull(b) //not null
-                                      );
+                                       notnull(b), //not null
+                                      Extensions._getSeparatedString(b, 9) //schema
+                                       );
 
                                     dgResultInsertRow("Target",
                                         string.Format("{0}.{1}.{2}", SymbolToObject(option), action, "not null"),
@@ -608,6 +619,9 @@ namespace zenComparer
                                     //nie da sie dodac identity do istniejacej
 
                                 }
+
+                                //drop all index
+                                // add all index
 
                             }
 
@@ -655,10 +669,11 @@ namespace zenComparer
                             if (action == "Missing")  //brakuje kolumny
                             {
 
-                                script = string.Format("alter table [{0}]  ADD CONSTRAINT  {1} PRIMARY KEY ({2}) ",
+                                script = string.Format("alter table [{3}].[{0}]  ADD CONSTRAINT  {1} PRIMARY KEY ({2}) ",
                                             Extensions._getSeparatedString(b, 3),  //table name
                                             Extensions._getSeparatedString(b, 0),  //name
-                                            Extensions._getSeparatedString(b, 4)  //column name
+                                            Extensions._getSeparatedString(b, 4), //column name
+                                             Extensions._getSeparatedString(b, 9) //schema
                                             );
                                 dgResultInsertRow("Target",
                                     string.Format("{0}.{1}", SymbolToObject(option), action),
@@ -671,6 +686,32 @@ namespace zenComparer
 
 
 
+
+                            break;
+
+                        case "IX":
+
+
+                          if (action == "Missmatched")
+                            {
+                                script = r["text"].ToString();
+                           
+
+                            }
+                            else //new
+                            {
+                                script = r["text"].ToString();
+                                script = script.Replace(", DROP_EXISTING = ON", ""); 
+                            }
+
+
+                            dgResultInsertRow("Target",
+                            string.Format("{0}.{1}.{2}", SymbolToObject(option), r["key"].ToString(), action),
+                             key,
+                            details,
+                            "Generated Script",
+                            script,
+                            ModelScript);
 
                             break;
                         default:
@@ -988,35 +1029,7 @@ namespace zenComparer
             }
         }
 
-        private void btnLoad_Click(object sender, EventArgs e)
-        {
-            if (lblfile.Text.Length > 0)
-            {
-                lblfile.Text = "";
-                btnLoad.Text = "Load schema from file";
-                GroupModel.Enabled = true;
-                butSwitch.Enabled = true;
-                btnSave.Enabled = true;
-            }
-            else
-            {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.Title = "Choose schema";
-                openFileDialog.InitialDirectory = Environment.CurrentDirectory;
-                openFileDialog.Filter = "SchemaFiles (*.db)|*.db";
-                openFileDialog.FilterIndex = 2;
-                openFileDialog.RestoreDirectory = true;
 
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    lblfile.Text = openFileDialog.FileName;
-                    GroupModel.Enabled = false;
-                    btnLoad.Text = "Clear";
-                    butSwitch.Enabled = false;
-                    btnSave.Enabled = false;
-                }
-            }
-        }
 
         private void mSSI_CheckedChanged(object sender, EventArgs e)
         {
@@ -1079,10 +1092,10 @@ namespace zenComparer
                     txtMaster.Text = x.getSectionString("MODEL").Trim();
                     txtSlave.Text = x.getSectionString("TARGET").Trim();
 
-                    modeltable.Text = x.getSectionString("COMPARE_DATA_MODELTABLE").Trim();
-                    targettable.Text = x.getSectionString("COMPARE_DATA_TARGETTABLE").Trim();
-                    tablekey.Text = x.getSectionString("COMPARE_DATA_TABLEKEY").Trim();
-                    excludecolumns.Text = x.getSectionString("COMPARE_DATA_EXCLUDEDCOLUMNS").Trim();
+                    //modeltable.Text = x.getSectionString("COMPARE_DATA_MODELTABLE").Trim();
+                    //targettable.Text = x.getSectionString("COMPARE_DATA_TARGETTABLE").Trim();
+                    //tablekey.Text = x.getSectionString("COMPARE_DATA_TABLEKEY").Trim();
+                    //excludecolumns.Text = x.getSectionString("COMPARE_DATA_EXCLUDEDCOLUMNS").Trim();
 
 
 
@@ -1097,52 +1110,7 @@ namespace zenComparer
             }
         }
 
-        private void toolSave_Click(object sender, EventArgs e)
-        {
-            try
-            {
 
-                string filename = string.Format("{0}_{1}.cfg", mdatabase.Text, sdatabase.Text);
-                FileStream f = new FileStream(filename, FileMode.Create);
-                StreamWriter s = new StreamWriter(f);
-
-                //foreach (Control c in Controls  )
-                //{
-                //    if (c is TextBox)
-                //    {
-                //        s.WriteLine(string.Format("[{0}]",c.Name));
-                //        s.WriteLine(c.Text);
-                //    }
-                //}
-
-
-
-                s.WriteLine("[MODEL]");
-                s.WriteLine(txtMaster.Text);
-                s.WriteLine("[TARGET]");
-                s.WriteLine(txtSlave.Text);
-                s.WriteLine("[EXCLUDEOBJECT]");
-                s.WriteLine(txtexclude.Text);
-
-                s.WriteLine("[COMPARE_DATA_MODELTABLE]");
-                s.WriteLine(modeltable.Text);
-                s.WriteLine("[COMPARE_DATA_TARGETTABLE]");
-                s.WriteLine(targettable.Text);
-                s.WriteLine("[COMPARE_DATA_TABLEKEY]");
-                s.WriteLine(tablekey.Text);
-                s.WriteLine("[COMPARE_DATA_EXCLUDEDCOLUMNS]");
-                s.WriteLine(excludecolumns.Text);
-
-                s.Close();
-                f.Close();
-                MessageBox.Show("File Saved " + filename);
-            }
-
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message.ToString());
-            }
-        }
 
 
 
@@ -1168,17 +1136,6 @@ namespace zenComparer
         }
 
 
-
-        private void startComparData_Click(object sender, EventArgs e)
-        {
-
-            result.Clear();
-            compareDATA x = new compareDATA(txtMaster.Text, txtSlave.Text,
-                modeltable.Text, targettable.Text, tablekey.Text, excludecolumns.Text);
-            result.AppendText(x.Script.ToString());
-            MessageBox.Show("Done");
-
-        }
 
         private void txtMaster_Enter(object sender, EventArgs e)
         {
@@ -1208,6 +1165,7 @@ namespace zenComparer
         }
 
 
-    
+
+
     }
 }

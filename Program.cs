@@ -3,17 +3,23 @@ using System.Windows.Forms;
 
 namespace zenComparer
 {
-    static class Program
+    
+
+    public static class Program
     {
+       public static  frmMain currentForm;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+            currentForm = new frmMain();
+            Application.Run(currentForm);
         }
     }
 }

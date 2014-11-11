@@ -83,6 +83,7 @@ namespace zenComparer
             cnn.Open();
             SqlCommand mycommand = new SqlCommand(sql, cnn);
             mycommand.CommandText = sql;
+            mycommand.CommandTimeout = 90;
             SqlDataReader reader = mycommand.ExecuteReader();
             dt.Load(reader);
             reader.Close();
