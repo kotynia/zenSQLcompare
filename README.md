@@ -1,6 +1,26 @@
+Getting started 
+---------------
+1. 
+compile or download version
+2. (optional) 
+download and install <a href="http://winmerge.org/" >http://winmerge.org/</a>
+adjust proper folder path 
+3.
+provide or paste connection strings
+4.
+go to tab compare database schema select "Start Compare"
+5.
+copy paste generated script to your favourite sql editor
+6. (optional)
+Geenrate script only for selected changes.
+7. (optional)
+review changes between scripts
+
+
 zenSQLcompare
 =============
 easy to use MSSQL database Schema comparision tool
+
 
 Features
 ---------
