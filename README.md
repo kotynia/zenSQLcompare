@@ -9,6 +9,7 @@ Features
 - 1.2.1 Save/load configuration to file
 - 1.2.1 Define Excluded object list
 - 1.2.1 Show difference in schema in external tool (ex. <a href="http://winmerge.org/" >http://winmerge.org/</a>)
+- 1.3 Support for index compare
 
 History
 -------
@@ -128,6 +129,18 @@ Scripts that zenComparer will generate for you:
     <tr>
       <td></td>
       <td>Missing View</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td>Index (IX)</td>
+      <td>Missmatched Index</td>
+      <td>YES</td>
+      <td>YES</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Missing Index</td>
       <td>YES</td>
       <td>YES</td>
     </tr>
