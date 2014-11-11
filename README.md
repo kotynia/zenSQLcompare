@@ -1,15 +1,15 @@
 Getting started 
 ---------------
 1. 
-compile or download version
+compile or download version https://github.com/marcinKotynia/zenSQLcompare/releases/download/1.3/zenSQLCompare.exe
 2. (optional) 
-download and install <a href="http://winmerge.org/" >http://winmerge.org/</a>
+download and install http://winmerge.org/
 adjust proper folder path 
-3.
+3. 
 provide or paste connection strings
-4.
+4. 
 go to tab compare database schema select "Start Compare"
-5.
+5. 
 copy paste generated script to your favourite sql editor
 6. (optional)
 Geenrate script only for selected changes.
