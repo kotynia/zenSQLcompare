@@ -554,15 +554,9 @@ namespace zenComparer
                                 if (string.CompareOrdinal(x, x1) != 0)
                                 {
 
-                                    //script = string.Format("alter table [{0}] drop CONSTRAINT [{1}] DEFAULT  {2} FOR {3}",
-                                    // Extensions._getSeparatedString(b, 0),  //table name
-                                    // Extensions._getSeparatedString(b, 8),  //default constraint name
-                                    // Extensions._getSeparatedString(b, 4),  //isnull(column_default, '')
-                                    // Extensions._getSeparatedString(b, 1)  //1- column_name
-                                    //  );
-                                    //result.AppendText(script + variables.scriptSeparator);
-
-                                    script = string.Format("alter table [{4}].[{0}] add CONSTRAINT [{1}] DEFAULT  {2} FOR {3}",
+                                    script = string.Format(@"
+sp_unbindefault  @objname = '[{4}].[{0}].[{3}]'  --try to unbind default throw error if no default
+alter table [{4}].[{0}] add CONSTRAINT [{1}] DEFAULT  {2} FOR {3} --bind",
                                      Extensions._getSeparatedString(b, 0),  //table name
                                      Extensions._getSeparatedString(b, 8),  //default constraint name
                                      Extensions._getSeparatedString(b, 4),  //isnull(column_default, '')
