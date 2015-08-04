@@ -1,8 +1,10 @@
+#zenSQLcompare Compare SQL Server schemas and create scripts "for most" differences
+
 Getting started 
 ---------------
 1. 
-compile or download version https://github.com/marcinKotynia/zenSQLcompare/releases/download/1.3/zenSQLCompare.exe
-2. (optional) 
+Take latest release  https://github.com/marcinKotynia/zenSQLcompare/releases
+2.
 download and install http://winmerge.org/
 adjust proper folder path 
 3. 
@@ -11,19 +13,11 @@ provide or paste connection strings
 go to tab compare database schema select "Start Compare"
 5. 
 copy paste generated script to your favourite sql editor
-6. (optional)
-Geenrate script only for selected changes.
-7. (optional)
-review changes between scripts
 
 
-zenSQLcompare
-=============
-easy to use MSSQL database Schema comparision tool
-
-
-Features
+Version
 ---------
+- 1.4.0 Bug Fixes, helper Scripts (2015-08)
 - 1.2.1 no additional library need, no instalation just unzip and run
 - 1.2.1 Generate T-SQL scripts to update one database to match the schema of another
 - 1.2.1 Save/load configuration to file
@@ -33,10 +27,10 @@ Features
 
 History
 -------
-zenCompare was developed by me about 6 years ago (2008) but i found its still usefull so i dig this code from my old laptop and Im sharing with you :)
+This is old, ugly code and tool but it works :) first version was  created aboout 2003 in VB6 converted to .net as IS in 2008 its still useful and updated.  
 
 
-Scripts that zenComparer will generate for you:
+zenComparer will solve most basic schema differencies including:
            
 <table>
   <thead>
@@ -166,3 +160,13 @@ Scripts that zenComparer will generate for you:
     </tr>
   </tbody>
 </table>
+
+What zenSQLCompare will not do for you
+
+- Solve multiple dependant problems (it will provide some helper scripts for manual adjustments)
+- Create completly new table (you can always script in Managment Studio)
+
+Similar tools that would help if you will not satisfied with result 
+- http://www.red-gate.com/products/sql-development/sql-compare/
+
+
