@@ -12,7 +12,7 @@ select distinct  SCHEMA_NAME(so.schema_id) + '.'+ so.name + '|' + so.type collat
 so.type ,
 isnull( OBJECT_DEFINITION(so.object_id),
 so.type  collate polish_ci_as + '|' + so.name + '|' + type_desc + '|'
-+isnull(CCU.TABLE_NAME,'') + '|' + isnull(CCU.COLUMN_NAME,'') ) text 
++isnull(CCU.TABLE_NAME,'') + '|' + isnull(CCU.COLUMN_NAME,'') ) + '|' + SCHEMA_NAME(so.schema_id) text 
 from sys.objects so left join 
 (select * from sys.syscomments where colid=1 )  sc on  so.object_id =sc.id
 left join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE CCU on 
@@ -129,9 +129,9 @@ FROM
                     + cast(isnull(numeric_precision, '') as varchar(50)) + '|'
                     + cast(isnull(numeric_scale, '') as varchar(50))+ '|'
                     + IS_NULLABLE + '|' 
-		    + isnull(DefaultConstraint.name, '') 
-			 + isnull(cast(columnproperty(object_id(table_name), INFORMATION_SCHEMA.columns.column_name,'IsIdentity') as varchar(1)),'0') 
-            + '|' + table_schema [text]
+		            + isnull(DefaultConstraint.name, '')  +'|'
+                    + table_schema  +'|'
+			        + isnull(cast(columnproperty(object_id(table_name), INFORMATION_SCHEMA.columns.column_name,'IsIdentity') as varchar(1)),'0')  [text]
 	 --columnproperty(object_id(table_name), INFORMATION_SCHEMA.columns.column_name,'IsIdentity') isIdentity
 	 -- cast(ident_seed(table_name) as varchar) ident_seed, -- moze kiedys
 	 -- cast(ident_incr(table_name) as varchar) ident_incr  -- moze kiedys

@@ -529,8 +529,26 @@ namespace zenComparer
 
                                 if (string.CompareOrdinal(x, x1) != 0)
                                 {
+                                    if (!string.IsNullOrEmpty(Extensions._getSeparatedString(a, 8)))
+                                    {
+                                        script = string.Format(@"
+exec sp_unbindefault  @objname = '[{4}].[{0}].[{1}]' --try to unbind default throw error if no default
+GO
+ALTER TABLE [{4}].[{0}] DROP CONSTRAINT [{5}]  -- drop default constraint which prevents update of datatype, Default constraint will be created in second schema comparision hit, Ugly but works :)
+GO
+",
+Extensions._getSeparatedString(b, 0),  //table name
+                                    Extensions._getSeparatedString(b, 1),  //column name
+                                    datatype(b),
+                                     notnull(b), //not null
+                                     Extensions._getSeparatedString(b, 9), //schema
+                                     Extensions._getSeparatedString(a, 8)  //default constarint name jelsi jest jakis
+                                    );
+                                    }
 
-                                    script = string.Format("alter table [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3} ",
+                                    script += string.Format(@"
+-- DROP INDEX[{4}].[{0}].[index name]  --IF index exists you must drop first, zencomparer will recreate from source index
+alter table [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3} ",
                                       Extensions._getSeparatedString(b, 0),  //table name
                                       Extensions._getSeparatedString(b, 1),  //column name
                                       datatype(b),
@@ -550,13 +568,30 @@ namespace zenComparer
                                 //porownanie default
                                 x = Extensions._getSeparatedString(a, 4);
                                 x1 = Extensions._getSeparatedString(b, 4);
-
+                                script = "";
                                 if (string.CompareOrdinal(x, x1) != 0)
                                 {
 
-                                    script = string.Format(@"
-sp_unbindefault  @objname = '[{4}].[{0}].[{3}]'  --try to unbind default throw error if no default
-alter table [{4}].[{0}] add CONSTRAINT [{1}] DEFAULT  {2} FOR {3} --bind",
+                                    if (!string.IsNullOrEmpty(Extensions._getSeparatedString(a, 8)))
+                                    {
+                                        script = string.Format(@"
+exec sp_unbindefault  @objname = '[{4}].[{0}].[{1}]' --try to unbind default throw error if no default
+GO
+ALTER TABLE [{4}].[{0}] DROP CONSTRAINT [{5}]  -- drop default constraint which prevents update of datatype, Default constraint will be created in second schema comparision hit, Ugly but works :)
+GO
+",
+Extensions._getSeparatedString(b, 0),  //table name
+                                    Extensions._getSeparatedString(b, 1),  //column name
+                                    datatype(b),
+                                     notnull(b), //not null
+                                     Extensions._getSeparatedString(b, 9), //schema
+                                     Extensions._getSeparatedString(a, 8)  //default constarint name jelsi jest jakis
+                                    );
+                                    }
+
+
+
+                                    script += string.Format("alter table [{4}].[{0}] add CONSTRAINT [{1}] DEFAULT  {2} FOR {3} --bind",
                                      Extensions._getSeparatedString(b, 0),  //table name
                                      Extensions._getSeparatedString(b, 8),  //default constraint name
                                      Extensions._getSeparatedString(b, 4),  //isnull(column_default, '')
@@ -579,7 +614,11 @@ alter table [{4}].[{0}] add CONSTRAINT [{1}] DEFAULT  {2} FOR {3} --bind",
                                 if (string.CompareOrdinal(x, x1) != 0)
                                 {
 
-                                    script = string.Format("alter table [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3} ",
+                                    script = string.Format(@"
+-- DROP INDEX [{4}].[{0}].[index name]  --IF index exists you must drop first, zencomparer will recreate from source index
+-- SELECT *  from [{4}].[{0}] where  [{1}] is null -- Helper query
+-- update [{4}].[{0}] set [{1}]  = Defaultvalue  where is null -- Helper query
+ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
                                       Extensions._getSeparatedString(b, 0),  //table name
                                       Extensions._getSeparatedString(b, 1),  //column name
                                       datatype(b),
@@ -592,7 +631,7 @@ alter table [{4}].[{0}] add CONSTRAINT [{1}] DEFAULT  {2} FOR {3} --bind",
                                         string.Format("{0}.{1}.{2}", SymbolToObject(option), action, "not null"),
                                          key,
                                       details,
-                                        "no Action > change manual ",
+                                        "Generated Script",
                                         script, "");
 
 
@@ -667,7 +706,7 @@ alter table [{4}].[{0}] add CONSTRAINT [{1}] DEFAULT  {2} FOR {3} --bind",
                                             Extensions._getSeparatedString(b, 3),  //table name
                                             Extensions._getSeparatedString(b, 0),  //name
                                             Extensions._getSeparatedString(b, 4), //column name
-                                             Extensions._getSeparatedString(b, 9) //schema
+                                             Extensions._getSeparatedString(b, 5) //schema
                                             );
                                 dgResultInsertRow("Target",
                                     string.Format("{0}.{1}", SymbolToObject(option), action),
