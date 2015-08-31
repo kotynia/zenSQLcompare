@@ -12,7 +12,7 @@ select distinct  SCHEMA_NAME(so.schema_id) + '.'+ so.name + '|' + so.type collat
 so.type ,
 isnull( OBJECT_DEFINITION(so.object_id),
 so.type  collate polish_ci_as + '|' + so.name + '|' + type_desc + '|'
-+isnull(CCU.TABLE_NAME,'') + '|' + isnull(CCU.COLUMN_NAME,'') ) + '|' + SCHEMA_NAME(so.schema_id) text 
++isnull(CCU.TABLE_NAME,'') + '|' + isnull(CCU.COLUMN_NAME,'') + '|' + SCHEMA_NAME(so.schema_id))  text 
 from sys.objects so left join 
 (select * from sys.syscomments where colid=1 )  sc on  so.object_id =sc.id
 left join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE CCU on 
