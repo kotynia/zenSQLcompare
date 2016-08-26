@@ -18,6 +18,10 @@ namespace zenComparer
         public static string commandLineArguments;
         public static string commandLineTool;
 
+        public DataTable masterTables { get; set; }
+        public DataTable masterIndexes { get; set; }
+        public DataTable masterObjects { get; set; }
+
         #region Initialize
         int excludedNumber;
         public frmMain()
@@ -146,8 +150,14 @@ namespace zenComparer
         {
             logger("Get schema for objects from MODEL ");
             DataTable master = new DataTable();
-            master = Extensions.GetDataTable(variables.sqlObjects, txtMaster.Text);
-
+            if (masterObjects != null)
+            {
+                master = masterObjects;
+            }
+            else
+            {
+                master = Extensions.GetDataTable(variables.sqlObjects, txtMaster.Text);
+            }
 
             logger("Get schema for objects from TARGET");
             DataTable slave = new DataTable();
@@ -155,8 +165,11 @@ namespace zenComparer
 
             logger("START COMPARING objects SCHEMA");
             compare(master, slave, out  excludedNumber);
-            master.Dispose();
-            slave.Dispose();
+            if (masterObjects == null)
+            {
+                master.Dispose();
+                slave.Dispose();
+            }
         }
         /// <summary>
         /// Dodanie pozycji do gridview
@@ -352,8 +365,14 @@ namespace zenComparer
         {
             logger("Get schema for index from MODEL ");
             DataTable master = new DataTable();
-            master = Extensions.GetDataTable(variables.sqlIndex, txtMaster.Text);
-
+            if (masterIndexes != null)
+            {
+                master = masterIndexes;
+            }
+            else
+            {
+                master = Extensions.GetDataTable(variables.sqlIndex, txtMaster.Text);
+            }
 
             logger("Get schema for index from TARGET");
             DataTable slave = new DataTable();
@@ -361,8 +380,11 @@ namespace zenComparer
 
             logger("START COMPARING index SCHEMA");
             compare(master, slave, out excludedNumber);
-            master.Dispose();
-            slave.Dispose();
+            if (masterIndexes == null)
+            {
+                master.Dispose();
+                slave.Dispose();
+            }
         }
 
 
@@ -377,8 +399,14 @@ namespace zenComparer
             DataTable master = new DataTable();
             DataTable slave = new DataTable();
 
-
-            master = Extensions.GetDataTable(variables.sqlTables, txtMaster.Text);
+            if (masterTables != null)
+            {
+                master = masterTables;
+            }
+            else
+            {
+                master = Extensions.GetDataTable(variables.sqlTables, txtMaster.Text);
+            }
 
             logger("Get schema for tables from TARGET");
             //Pobranie danych z slav
@@ -388,8 +416,11 @@ namespace zenComparer
 
             compare(master, slave, out excludedNumber);
 
-            master.Dispose();
-            slave.Dispose();
+            if (masterTables == null)
+            {
+                master.Dispose();
+                slave.Dispose();
+            }
         }
 
 
@@ -1197,8 +1228,22 @@ ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
             gridToScript(false);
         }
 
+        private void btnStartCompare_Click(object sender, EventArgs e)
+        {
 
+        }
 
+        private void butLoadModelSchema_MouseClick(object sender, MouseEventArgs e)
+        {
 
+        }
+
+        private void butLoadModelSchema_Click(object sender, EventArgs e)
+        {
+            masterTables = Extensions.GetDataTable(variables.sqlTables, txtMaster.Text);
+            masterObjects = Extensions.GetDataTable(variables.sqlObjects, txtMaster.Text);
+            masterIndexes = Extensions.GetDataTable(variables.sqlIndex, txtMaster.Text);
+            GroupModel.Text = "Model Database (loaded)";
+        }
     }
 }
