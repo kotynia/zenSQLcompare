@@ -132,7 +132,7 @@ namespace zenComparer
             Refresh();
             compareObjects();
 
-             compareIndex();
+            compareIndex();
 
             gridToScript(true);
 
@@ -164,7 +164,7 @@ namespace zenComparer
             slave = Extensions.GetDataTable(variables.sqlObjects, txtSlave.Text);
 
             logger("START COMPARING objects SCHEMA");
-            compare(master, slave, out  excludedNumber);
+            compare(master, slave, out excludedNumber);
             if (masterObjects == null)
             {
                 master.Dispose();
@@ -456,7 +456,7 @@ namespace zenComparer
 
                 string details = "";
                 string key = Extensions._getSeparatedString(r["key"].ToString().ToLower(), 0);
-                key = key.Replace("dbo.", "");
+                // key = key.Replace("dbo.", "");
                 key = key.Replace("[", "");
                 key = key.Replace("]", ""); //nazwa obiektu
 
@@ -465,7 +465,36 @@ namespace zenComparer
 
                 foreach (string s in excludeditem)
                 {
-                    if (key == s.ToLower())
+                    if (s.StartsWith("*") && s.EndsWith("*"))
+                    {
+                        if (key.Contains(s.ToLower().Replace("*", "")))
+                        {
+                            excluded = true;
+                            break;
+                        }
+
+                    }
+
+                    else if (s.EndsWith("*"))
+                    {
+                        if (key.StartsWith(s.ToLower().Replace("*", "")))
+                        {
+                            excluded = true;
+                            break;
+                        }
+
+                    }
+                    else if (s.StartsWith("*"))
+                    {
+                        if (key.EndsWith(s.ToLower().Replace("*", "")))
+                        {
+                            excluded = true;
+                            break;
+                        }
+
+                    }
+                    else
+                     if (key == s.ToLower())
                     {
                         excluded = true;
                         break;
@@ -653,7 +682,7 @@ ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
                                       Extensions._getSeparatedString(b, 0),  //table name
                                       Extensions._getSeparatedString(b, 1),  //column name
                                       datatype(b),
-                                        // identity(b), //identity
+                                       // identity(b), //identity
                                        notnull(b), //not null
                                       Extensions._getSeparatedString(b, 9) //schema
                                        );
@@ -756,16 +785,16 @@ ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
                         case "IX":
 
 
-                          if (action == "Missmatched")
+                            if (action == "Missmatched")
                             {
                                 script = r["text"].ToString();
-                           
+
 
                             }
                             else //new
                             {
                                 script = r["text"].ToString();
-                                script = script.Replace(", DROP_EXISTING = ON", ""); 
+                                script = script.Replace(", DROP_EXISTING = ON", "");
                             }
 
 
@@ -945,7 +974,7 @@ ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
             }
             retval = String.Concat(Extensions._getSeparatedString(item, 2),//data_type 
                  retval//,   //data_type 
-                //Extensions._getSeparatedString(item, 7).ToLower() == "yes" ? " NULL" : " NOT NULL"
+                       //Extensions._getSeparatedString(item, 7).ToLower() == "yes" ? " NULL" : " NOT NULL"
                  );//not null
 
 
@@ -1244,6 +1273,11 @@ ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
             masterObjects = Extensions.GetDataTable(variables.sqlObjects, txtMaster.Text);
             masterIndexes = Extensions.GetDataTable(variables.sqlIndex, txtMaster.Text);
             GroupModel.Text = "Model Database (loaded)";
+        }
+
+        private void txtexclude_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
