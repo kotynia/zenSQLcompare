@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
@@ -22,7 +23,7 @@ namespace zenComparer
             foreach (DataRow drIn in dtIn.Rows)
             {
                 if (!htOut.ContainsKey(drIn[keyField].ToString().ToLower()))
-                htOut.Add(drIn[keyField].ToString().ToLower(), drIn[valueField].ToString());
+                    htOut.Add(drIn[keyField].ToString().ToLower(), drIn[valueField].ToString());
             }
             return htOut;
         }
@@ -48,9 +49,32 @@ namespace zenComparer
         /// </summary>
         /// <param name="IN"></param>
         /// <returns></returns>
-        public static string _cleanstring(string IN)
+        public static string _cleanstring(string input)
         {
-            return regex.Replace(IN, "");
+            return regex.Replace(input, "");
+        }
+
+
+        //dirty check
+        public static string _cleanstringWithoutComments(string input)
+        {
+
+            input = input.Replace("WITH EXEC AS CALLER", "");
+            input = input.Replace("[", "");
+            input = input.Replace("]", "");
+
+
+            var blockComments = @"/\*(.*?)\*/";
+            var lineComments = @"--(.*?)\r?\n";
+            var strings = @"'((\\[^\n]|[^""\n])*)'";
+            // var verbatimStrings = @"@(""[^""]*"")+";
+
+
+            string retvalue = Regex.Replace(input,
+            blockComments + "|" + lineComments + "|" + strings,"",
+            RegexOptions.Singleline);
+
+            return zenComparer.Extensions._cleanstring(retvalue);
         }
 
 

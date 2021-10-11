@@ -119,6 +119,9 @@ namespace zenComparer
         /// </summary>
         void btncompare_Click(object sender, EventArgs e)
         {
+
+           
+
             //   try
             // {
             Cursor.Current = Cursors.WaitCursor;
@@ -465,9 +468,9 @@ namespace zenComparer
 
                 foreach (string s in excludeditem)
                 {
-                    if (s.StartsWith("*") && s.EndsWith("*"))
+                    if (s.Trim().StartsWith("*") && s.Trim().EndsWith("*"))
                     {
-                        if (key.Contains(s.ToLower().Replace("*", "")))
+                        if (key.Trim().Contains(s.Trim().ToLower().Replace("*", "")))
                         {
                             excluded = true;
                             break;
@@ -475,18 +478,18 @@ namespace zenComparer
 
                     }
 
-                    else if (s.EndsWith("*"))
+                    else if (s.Trim().EndsWith("*"))
                     {
-                        if (key.StartsWith(s.ToLower().Replace("*", "")))
+                        if (key.Trim().StartsWith(s.Trim().ToLower().Replace("*", "")))
                         {
                             excluded = true;
                             break;
                         }
 
                     }
-                    else if (s.StartsWith("*"))
+                    else if (s.Trim().StartsWith("*"))
                     {
-                        if (key.EndsWith(s.ToLower().Replace("*", "")))
+                        if (key.Trim().EndsWith(s.Trim().ToLower().Replace("*", "")))
                         {
                             excluded = true;
                             break;
@@ -494,7 +497,7 @@ namespace zenComparer
 
                     }
                     else
-                     if (key == s.ToLower())
+                     if (key == s.Trim().ToLower())
                     {
                         excluded = true;
                         break;
@@ -525,6 +528,17 @@ namespace zenComparer
                     {
                         action = "Missmatched";
                     }
+
+                    //Porównujemy bez komentarzy i 
+                    if (action == "Missmatched")
+                    {
+                        string text = zenComparer.Extensions._cleanstringWithoutComments(ModelScript);
+
+                        if (string.CompareOrdinal(zenComparer.Extensions._cleanstringWithoutComments(ModelScript), zenComparer.Extensions._cleanstringWithoutComments(TargetScript)) == 0)
+                        {
+                            action = "Missmatched.Comments";
+                        }
+                    }
                 }
                 else //Obiekt missing
                 {
@@ -532,7 +546,7 @@ namespace zenComparer
                     action = "Missing";
                 }
                 details = Extensions._getSeparatedString(b, 1);
-                if (action == "Missing" || action == "Missmatched")
+                if (action == "Missing" || action == "Missmatched" || action =="Missmatched.Comments")
                     switch (option)
                     {
                         //case "U":
@@ -576,7 +590,7 @@ namespace zenComparer
                                     script, "");
 
                             }
-                            else if (action == "Missmatched") //data_type, character maximum length,numeric precision, numeric scale
+                            else if (action == "Missmatched" || action =="Missmatched.Comments") //data_type, character maximum length,numeric precision, numeric scale
                             {
                                 //    0     1
                                 //a	"tbldoc|docagreement|datetime|||0|0|YES|"	string
@@ -728,7 +742,7 @@ ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
                         case "TR":  //FN ,IF,P,TR,V
                         case "V":   //FN ,IF,P,TR,V
 
-                            if (action == "Missmatched")
+                            if (action == "Missmatched" || action =="Missmatched.Comments")
                             {
                                 script = replaceAlter(r["text"].ToString());
                                 ModelScript = replaceAlter(ModelScript);
@@ -794,7 +808,7 @@ ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
                             else //new
                             {
                                 script = r["text"].ToString();
-                                script = script.Replace(", DROP_EXISTING = ON", "");
+                                //script = script.Replace(", DROP_EXISTING = ON", "");
                             }
 
 
@@ -1276,6 +1290,16 @@ ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
         }
 
         private void txtexclude_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
 
         }
