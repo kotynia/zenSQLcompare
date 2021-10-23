@@ -2,17 +2,11 @@
 
 Getting started 
 ---------------
-1. 
-Take latest release  https://github.com/marcinKotynia/zenSQLcompare/releases
-2.
-download and install http://winmerge.org/
-adjust proper folder path 
-3. 
-provide or paste connection strings
-4. 
-go to tab compare database schema select "Start Compare"
-5. 
-copy paste generated script to your favourite sql editor
+1.  Take latest release  https://github.com/marcinKotynia/zenSQLcompare/releases
+2. download and install http://winmerge.org/  , adjust proper folder path 
+3.  provide or paste connection strings
+4.  go to tab compare database schema select "Start Compare"
+5.  copy paste generated script to your favourite sql editor
 
 
 Version
@@ -166,7 +160,15 @@ What zenSQLCompare will not do for you
 - Solve multiple dependant problems (it will provide some helper scripts for manual adjustments)
 - Create completly new table (you can always script in Managment Studio)
 
-Similar tools that would help if you will not satisfied with result 
-- http://www.red-gate.com/products/sql-development/sql-compare/
+## Bugs
+
+### Scenario  Comparing  
+- database 1 and "Uniqued index" 
+- database 2 and "Unique Key" (constraint)
+
+will build partial script, you need to drop constraint first
+```
+ALTER TABLE [table name] DROP CONSTRAINT [index name] 
+```
 
 
