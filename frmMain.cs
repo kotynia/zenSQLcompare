@@ -74,8 +74,8 @@ namespace zenComparer
                         Process myProc;
 
                         // Generate File
-
-                        string filenameModel = string.Format("{3}_{0}_{1}_{2}_M.sql", mdatabase.Text, (string)dgvr.Cells["object"].Value, DateTime.Now.ToString("yyyymmddhhmmss"), mserver.Text);
+                        Directory.CreateDirectory(Application.StartupPath + "\\log\\");
+                        string filenameModel = string.Format(Application.StartupPath +"\\log\\{3}_{0}_{1}_{2}_M.sql", mdatabase.Text, (string)dgvr.Cells["object"].Value, DateTime.Now.ToString("yyyymmddhhmmss"), mserver.Text);
                         FileStream f = new FileStream(filenameModel, FileMode.Create);
                         StreamWriter s = new StreamWriter(f);
 
@@ -85,7 +85,7 @@ namespace zenComparer
                         f.Close();
 
 
-                        string filenameTarget = string.Format("{3}_{0}_{1}_{2}_T.sql", sdatabase.Text, (string)dgvr.Cells["object"].Value, DateTime.Now.ToString("yyyymmddhhmmss"), mserver.Text);
+                        string filenameTarget = string.Format(Application.StartupPath +"\\log\\{3}_{0}_{1}_{2}_T.sql", sdatabase.Text, (string)dgvr.Cells["object"].Value, DateTime.Now.ToString("yyyymmddhhmmss"), mserver.Text);
                         f = new FileStream(filenameTarget, FileMode.Create);
                         s = new StreamWriter(f);
 
@@ -95,8 +95,8 @@ namespace zenComparer
                         f.Close();
 
 
-                        string commandline = txtarguments.Text.Replace("%Model", Application.StartupPath + "\\" + filenameModel);
-                        commandline = commandline.Replace("%Target", Application.StartupPath + "\\" + filenameTarget);
+                        string commandline = txtarguments.Text.Replace("%Model", filenameModel);
+                        commandline = commandline.Replace("%Target", filenameTarget);
 
                         myProc = Process.Start(txtExternalTool.Text, commandline);
                     }
@@ -775,20 +775,22 @@ ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
 
                             if (action == "Missing")  //brakuje kolumny
                             {
-
-                                script = string.Format("alter table [{3}].[{0}]  ADD CONSTRAINT  {1} PRIMARY KEY ({2}) ",
-                                            Extensions._getSeparatedString(b, 3),  //table name
-                                            Extensions._getSeparatedString(b, 0),  //name
-                                            Extensions._getSeparatedString(b, 4), //column name
-                                             Extensions._getSeparatedString(b, 5) //schema
-                                            );
-                                dgResultInsertRow("Target",
-                                    string.Format("{0}.{1}", SymbolToObject(option), action),
-                                   key,
-                                   details,
-                                    "Generated Script Primary key ",
-                                    script, "");
-
+                                //FIX  alter table [dbo].[]  ADD CONSTRAINT  PK PRIMARY KEY () on funcitons
+                                if (!string.IsNullOrEmpty(Extensions._getSeparatedString(b, 3)))
+                                {
+                                    script = string.Format("alter table [{3}].[{0}]  ADD CONSTRAINT  {1} PRIMARY KEY ({2}) ",
+                                                Extensions._getSeparatedString(b, 3),  //table name
+                                                Extensions._getSeparatedString(b, 0),  //name
+                                                Extensions._getSeparatedString(b, 4), //column name
+                                                 Extensions._getSeparatedString(b, 5) //schema
+                                                );
+                                    dgResultInsertRow("Target",
+                                        string.Format("{0}.{1}", SymbolToObject(option), action),
+                                       key,
+                                       details,
+                                        "Generated Script Primary key ",
+                                        script, "");
+                                }
                             }
 
 
@@ -802,7 +804,7 @@ ALTER TABLE [{4}].[{0}] ALTER COLUMN  [{1}] {2} {3}",
                             if (action == "Missmatched")
                             {
                                 script = r["text"].ToString();
-
+                            
 
                             }
                             else //new
