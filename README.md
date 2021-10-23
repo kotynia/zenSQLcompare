@@ -166,7 +166,12 @@ What zenSQLCompare will not do for you
 - database 1 and "Uniqued index" 
 - database 2 and "Unique Key" (constraint)
 
-will build partial script, you need to drop constraint first
+**Result** 
+invalid script - partial
+
+**How to solve**
+Drop constraint first
+
 ```
 ALTER TABLE [table name] DROP CONSTRAINT [index name] 
 ```
